@@ -368,6 +368,8 @@ filename <- paste0("forShiny/", "Prediction", Sys.Date(), ".csv", sep = "")
 
 Prediction_selected<- read.csv(file = paste(filename))
 
+#Prediction_selected<- read.csv(file = paste("forShiny/Prediction2021-09-15.csv"))
+
 todays_date <- as.Date(Sys.Date())
 week1<-paste(floor_date(todays_date, 'week'))
 week2<-paste(floor_date(todays_date, 'week')+7)
@@ -412,7 +414,7 @@ for(i in 1:3){
     ggthemes::theme_map()+
     theme(text = element_text(size = 10)),
   
-  filename = paste("www/images/",log_rate_name, week[i], ".png", sep = ""),  width = 5, height = 8
+  filename = paste("www/images/",log_rate_name, i, ".png", sep = ""),  width = 5, height = 8
     
   )
   
@@ -427,7 +429,7 @@ for(i in 1:3){
       ggthemes::theme_map()+
       theme(text = element_text(size = 10)),
     
-    filename = paste("www/images/", log_specimen_rate_name, week[i], ".png", sep = ""),  width = 5, height = 8
+    filename = paste("www/images/", log_specimen_rate_name, i, ".png", sep = ""),  width = 5, height = 8
     
   )
   

@@ -29,7 +29,7 @@ log_rate_name <- as.character("lograte")
 log_specimen_rate_name <-as.character("logspecimenrate")
 
 
-filename <-filename <- paste0("forShiny/", "Prediction", "2021-09-08", ".csv", sep = "")
+#filename <-filename <- paste0("forShiny/Prediction2021-09-15.csv")
 prediction <- read.csv(file = paste(filename))
 
 
@@ -155,21 +155,21 @@ server <- function(input, output, session) {
   
   output$image<-renderUI({
     if(input$log ==paste0(week1)){
-      img(src =paste("images/",log_rate_name, week1, ".png", sep = ""), width ="100%")
+      img(src =paste("images/",log_rate_name, "1", ".png", sep = ""), width ="100%")
     } else if (input$log== paste0(week2)){
-      img(src =paste("images/",log_rate_name, week2, ".png", sep = ""), width ="100%")
+      img(src =paste("images/",log_rate_name, "2", ".png", sep = ""), width ="100%")
     } else if (input$log == paste0(week3)){
-      img(src =paste("images/",log_rate_name, week3, ".png", sep = ""), width = "100%")
+      img(src =paste("images/",log_rate_name, "3", ".png", sep = ""), width = "100%")
     }
   })
   
   output$image1<-renderUI({
     if(input$log2 ==paste0(week1)){
-      img(src =paste("images/", log_specimen_rate_name, week1, ".png", sep = ""), width ="100%", alt ="graph")
+      img(src =paste("images/", log_specimen_rate_name, "1", ".png", sep = ""), width ="100%", alt ="graph")
     } else if (input$log2== paste0(week2)){
-      img(src =paste("images/", log_specimen_rate_name, week2, ".png", sep = ""), width = "100%" )
+      img(src =paste("images/", log_specimen_rate_name, "2", ".png", sep = ""), width = "100%" )
     } else if (input$log2 == paste0(week3)){
-      img(src =paste("images/", log_specimen_rate_name, week3, ".png", sep = ""), width ="100%")
+      img(src =paste("images/", log_specimen_rate_name, "3", ".png", sep = ""), width ="100%")
     }
   })
   
