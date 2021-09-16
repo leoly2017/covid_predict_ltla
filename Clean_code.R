@@ -344,7 +344,6 @@ Prediction_selected$lci.percentage <- (exp(Prediction_selected$est - 1.96*Predic
 Prediction_selected$uci.percentage <- (exp(Prediction_selected$est + 1.96*Prediction_selected$se)-1)*100
 write.csv(Prediction_selected, paste("forShiny/", "Prediction", Sys.Date(), ".csv", sep = ""), row.names = FALSE)
 
-filename <- paste0("forShiny/", "Prediction", Sys.Date(), ".csv", sep = "")
 # 3.6 Save workplace for quick overview of historical results----
 save(data8.03,MSE_naive_by_LTLA, 
      log_rate_1_lag_combos3, log_rate_2_lag_combos3, log_rate_3_lag_combos3,
@@ -365,9 +364,11 @@ library(plotly)
 
 load(file = "cleaned/master_2021-02-19.RData")
 
-filename <- paste0("forShiny/", "Prediction", "2021-09-01", ".csv", sep = "")
+filename <- paste0("forShiny/", "Prediction", Sys.Date(), ".csv", sep = "")
 
 Prediction_selected<- read.csv(file = paste(filename))
+
+#Prediction_selected<- read.csv(file = paste("forShiny/Prediction2021-09-15.csv"))
 
 todays_date <- as.Date(Sys.Date())
 week1<-paste(floor_date(todays_date, 'week'))
@@ -413,7 +414,7 @@ for(i in 1:3){
     ggthemes::theme_map()+
     theme(text = element_text(size = 10)),
   
-  filename = paste("www/images/",log_rate_name, week[i], ".png", sep = ""),  width = 5, height = 8
+  filename = paste("www/images/",log_rate_name, i, ".png", sep = ""),  width = 5, height = 8
     
   )
   
@@ -428,9 +429,30 @@ for(i in 1:3){
       ggthemes::theme_map()+
       theme(text = element_text(size = 10)),
     
-    filename = paste("www/images/", log_specimen_rate_name, week[i], ".png", sep = ""),  width = 5, height = 8
+    filename = paste("www/images/", log_specimen_rate_name, i, ".png", sep = ""),  width = 5, height = 8
     
   )
   
 }
 #=====================================
+todays_date <- as.Date(Sys.Date())
+week1<-paste(floor_date(todays_date, 'week'))
+week2<-paste(floor_date(todays_date, 'week')+7)
+week3<-paste(floor_date(todays_date, 'week')+14)
+
+referenceweek<- paste(floor_date(todays_date, 'week')-7)
+
+save(list = c("todays_date", "week1", "week2", "week3", "referenceweek", "filename"), file = "dates.Rdata")
+
+
+
+
+
+
+
+
+
+
+
+
+
