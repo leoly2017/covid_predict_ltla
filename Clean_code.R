@@ -28,7 +28,7 @@ data1.3 <- data1.3[order(data1.3$sub_region_1,data1.3$date),]
 #The missing values were then interpolated by sub region.
 data1.4 <- do.call(rbind, by(data1.3,data1.3$sub_region_1,na_interpolation_LTLA1))
 #Although the observations were/are already weekly, we created a week variable to help merge the results with other data sets. We also created a numbered week of the year variable to merge with the baseline data.
-data1.4$week_begin <- floor_date(data1.4$date,"week")
+data1.4$week_begin <- floor_date(data1.4$date+7,"week")
 data1.4$week_year <- data1.4$week_begin
 data1.4$week_year <- strftime(data1.4$week_year,format = "%V")
 #We then added the suffix "_data" to the symptom column names to specify that this was the data set for symptom searches during the COVID pandemic.
