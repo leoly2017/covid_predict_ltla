@@ -32,8 +32,10 @@ log_specimen_rate_name <-as.character("logspecimenrate")
 #filename <-filename <- paste0("forShiny/Prediction2021-09-15.csv")
 prediction <- read.csv(file = paste(filename))
 
-
-
+week1<-paste(floor_date(todays_date, 'week')+1)
+week2<-paste(floor_date(todays_date, 'week')+8)
+week3<-paste(floor_date(todays_date, 'week')+15)
+referenceweek<- paste(floor_date(todays_date, 'week')-6)
 
 #get data of log_rate and log_specimen_rate
 
@@ -69,7 +71,7 @@ table6 <- read.csv(paste0(log_specimen_rate_name, "3", '.csv'),header = TRUE, se
 #================================================================================
 ui <- fluidPage(
   fluidRow(box(width =12, title="Predicting COVID-19 epidemics in local authorities of the UK", solidHeader = TRUE, br(),
-               tags$p("By incorporating big data on vaccination, mobility and Google search queries, this tool predicts how the number of COVID-19 cases would change in % for the current week and the next two weeks, compared to the precious week. Two forms of COVID-19 cases are available: by notification date and by specimen date", style = "font-size:16px;"),
+               tags$p("By combining the use of artificial intelligence with vaccination data, localised mobility and Google search queries, we have built a simple prediction model that can predict how the number of COVID-19 cases will change in the immediate short term. The change is presented as a % change for the current week, compared to the previous week, and also predicts the change for the following two weeks. ", br(), br(), " Our model looks at two forms of COVID-19 case information available: by notification date- when cases were reported to the authorities; and also by specimen date (beta)- when the sample was collected from the patient.",style = "font-size:16px;"),
                fluidRow(HTML('&emsp;'),tags$b("    Last Update:", todays_date), br(), HTML('&emsp;'),tags$b("    Reference Week:", referenceweek),style = "font-size:15px;"),br())),
   tabsetPanel(
     id='tabset',
@@ -86,7 +88,7 @@ ui <- fluidPage(
                )),
              
              fluidRow(box(width = 12, br(), br(),
-                          tags$p("View the predicted percentage in the number of COVID-19 cases for the selected week, compared with week beginning", tags$b(referenceweek), br(), "Use the", tags$b("search function on the right"), "for a specific local authority",style = "font-size:16px;"), 
+                          tags$p("View the predicted percentage change in the number of COVID-19 cases week by week by moving the slider bar to the week of your choice. The percentage change predicted is a percentage figure comparing to the COVID-19 case levels for week beginning", tags$b(referenceweek), br(), br(), "Use the", tags$b("search function on the right hand side"), "to select a specific local UK authority.",br(), br(),style = "font-size:16px;") 
              )),
              
              fluidRow(
@@ -97,6 +99,7 @@ ui <- fluidPage(
                       
                )
              ),
+	     fluidRow(box(width =12,tags$p("This work was supported by the WellcomeTrust ITPA programme at the University of Edinburgh",style = "font-size:14px;")))
              #uiOutput("interactive_slider")),
              #fluidRow(column(width = 9, wellPanel(
              #shinycssloaders::withSpinner(
@@ -105,7 +108,7 @@ ui <- fluidPage(
              #)
     ),
     
-    tabPanel("By Specimen Date",
+    tabPanel("By Specimen Date (beta)",
              #fluidRow(box(br(), tags$b("    Reference date:", todays_date) ,collapsible = TRUE, color = "blue", status = "primary", style = "font-size:17px;")),
              fluidRow(
                br(), column(width = 6, wellPanel( 
@@ -118,7 +121,7 @@ ui <- fluidPage(
                )),
              
              fluidRow(box(width = 12, br(), br(),
-                          tags$p("View the predicted percentage in the number of COVID-19 cases for the selected week, compared with week beginning", tags$b(referenceweek), br(), "Use the", tags$b("search function on the right"), "for a specific local authority",style = "font-size:16px;"), 
+                          tags$p("View the predicted percentage change in the number of COVID-19 cases week by week by moving the slider bar to the week of your choice. The percentage change predicted is a percentage figure comparing to the COVID-19 case levels for week beginning", tags$b(referenceweek), br(), br(), "Use the", tags$b("search function on the right hand side"), "to select a specific local UK authority.",br(), br(),style = "font-size:16px;")
              )),
              
              fluidRow(
@@ -129,6 +132,7 @@ ui <- fluidPage(
                       
                )
              ),
+             fluidRow(box(width =12,tags$p("This work was supported by the WellcomeTrust ITPA programme at the University of Edinburgh",style = "font-size:14px;")))
              #uiOutput("interactive_slider")),
              #fluidRow(column(width = 9, wellPanel(
              #shinycssloaders::withSpinner(

@@ -28,7 +28,7 @@ data1.3 <- data1.3[order(data1.3$sub_region_1,data1.3$date),]
 #The missing values were then interpolated by sub region.
 data1.4 <- do.call(rbind, by(data1.3,data1.3$sub_region_1,na_interpolation_LTLA1))
 #Although the observations were/are already weekly, we created a week variable to help merge the results with other data sets. We also created a numbered week of the year variable to merge with the baseline data.
-data1.4$week_begin <- floor_date(data1.4$date,"week")
+data1.4$week_begin <- floor_date(data1.4$date+7,"week")
 data1.4$week_year <- data1.4$week_begin
 data1.4$week_year <- strftime(data1.4$week_year,format = "%V")
 #We then added the suffix "_data" to the symptom column names to specify that this was the data set for symptom searches during the COVID pandemic.
@@ -409,7 +409,7 @@ for(i in 1:3){
               aes(x = long, y = lat, group = group, fill = Change_in_cases,
                 text = paste("LTLA:",Map))) +
     geom_polygon(colour = "grey50", size = 0.05)+
-    scale_fill_gradient2(name = "% Change from baseline", midpoint=0,
+    scale_fill_gradient2(name = "% Change\nfrom baseline", midpoint=0,
                          high = "red", low = "blue", na.value = "grey")+
     ggthemes::theme_map()+
     theme(text = element_text(size = 10)),
@@ -424,7 +424,7 @@ for(i in 1:3){
               aes(x = long, y = lat, group = group, fill = Change_in_cases,
                   text = paste("LTLA:",Map))) +
       geom_polygon(colour = "grey50", size = 0.05)+
-      scale_fill_gradient2(name = "% Change from baseline", midpoint=0,
+      scale_fill_gradient2(name = "% Change\nfrom baseline", midpoint=0,
                            high = "red", low = "blue", na.value = "grey")+
       ggthemes::theme_map()+
       theme(text = element_text(size = 10)),
