@@ -409,7 +409,7 @@ for(i in 1:3){
               aes(x = long, y = lat, group = group, fill = Change_in_cases,
                 text = paste("LTLA:",Map))) +
     geom_polygon(colour = "grey50", size = 0.05)+
-    scale_fill_gradient2(name = "% Change from baseline", midpoint=0,
+    scale_fill_gradient2(name = "% Change\nfrom baseline", midpoint=0,
                          high = "red", low = "blue", na.value = "grey")+
     ggthemes::theme_map()+
     theme(text = element_text(size = 10)),
@@ -424,7 +424,7 @@ for(i in 1:3){
               aes(x = long, y = lat, group = group, fill = Change_in_cases,
                   text = paste("LTLA:",Map))) +
       geom_polygon(colour = "grey50", size = 0.05)+
-      scale_fill_gradient2(name = "% Change from baseline", midpoint=0,
+      scale_fill_gradient2(name = "% Change\nfrom baseline", midpoint=0,
                            high = "red", low = "blue", na.value = "grey")+
       ggthemes::theme_map()+
       theme(text = element_text(size = 10)),
