@@ -94,8 +94,30 @@ data6$week_begin <- floor_date(data6$date,"week")
 #Before interpolating the data, all vaccination observations were set to zero for dates before the vaccine roll-outs (7th of December and 28th of December 2020 for first and second dose respectively).
 data6[data6$date <= "2020-12-7", "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage"] <- 0
 data6[data6$date <= "2020-12-28", "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage"] <- 0
+
+#This is to correct for no vaccination data in Northern Ireland and Wales
+data6.0 <- readxl::read_xlsx("inputs/LTLA-ed.xlsx")
+names(data6.0)[3] <- c("areaName")
+data6.0 <- left_join(data6.0, data6)
+data6.1 <- read_csv("https://api.coronavirus.data.gov.uk/v2/data?areaType=nation&metric=cumVaccinationFirstDoseUptakeByPublishDatePercentage&metric=cumVaccinationSecondDoseUptakeByPublishDatePercentage&format=csv")
+data6.0$CD_1 <- substr(data6.0$areaCode,1,1)
+data6.1$CD_1 <- substr(data6.1$areaCode,1,1)
+names(data6.1)[5:6] <- c("vac1_national", "vac2_national")
+data6.11 <- left_join(data6.0, data6.1[4:7])
+data6.11$cumVaccinationFirstDoseUptakeByVaccinationDatePercentage[
+  is.na(data6.11$cumVaccinationFirstDoseUptakeByVaccinationDatePercentage)
+] <- data6.11$vac1_national[
+  is.na(data6.11$cumVaccinationFirstDoseUptakeByVaccinationDatePercentage)
+]
+data6.11$cumVaccinationSecondDoseUptakeByVaccinationDatePercentage[
+  is.na(data6.11$cumVaccinationSecondDoseUptakeByVaccinationDatePercentage)
+  ] <- data6.11$vac2_national[
+    is.na(data6.11$cumVaccinationSecondDoseUptakeByVaccinationDatePercentage)
+    ]
+data6.12 <- data6.11[names(data6)]
 #The data was then interpolated.
-data6.2 <- do.call(rbind, by(data6,data6$areaName,na_interpolation_LTLA3))
+data6.2 <- do.call(rbind, by(data6.12,data6$areaName,na_interpolation_LTLA3))
+rm(data6.0, data6.1, data6.11)
 #The variables were then aggregated by LTLA and week. For the vaccination variables, we chose the maximum percentage for each week, for the COVID case outcomes, we chose the sum of cases for each week. The new data sets were then joined and the column names restored.
 data6.3 <- aggregate(data6.2[,7:8], by = list(data6.2$areaName,data6.2$week_begin),sum, na.rm = TRUE)
 data6.4 <- aggregate(data6.2[,5:6], by = list(data6.2$areaName,data6.2$week_begin),max)
@@ -443,16 +465,3 @@ week3<-paste(floor_date(todays_date, 'week')+14)
 referenceweek<- paste(floor_date(todays_date, 'week')-7)
 
 save(list = c("todays_date", "week1", "week2", "week3", "referenceweek", "filename"), file = "dates.Rdata")
-
-
-
-
-
-
-
-
-
-
-
-
-
