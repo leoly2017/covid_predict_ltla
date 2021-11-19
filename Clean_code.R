@@ -17,10 +17,13 @@ message("Data preparation")
 #The weekly Google symptom search data during the COVID pandemic was downloaded in API format.
 data1 <- read_csv("http://storage.googleapis.com/gcs-public-data---symptom-search/2021/country/weekly/2021_GB_weekly_symptoms_dataset.csv")
 data1.2 <- read_csv("http://storage.googleapis.com/gcs-public-data---symptom-search/2020/country/weekly/2020_GB_weekly_symptoms_dataset.csv")
+
+data1.2_2022 <- read_csv("http://storage.googleapis.com/gcs-public-data---symptom-search/2022/country/weekly/2022_GB_weekly_symptoms_dataset.csv")
+
 # A new data set was prepared for the two years. 
 # This involved changing the column names to make it easier to use the $ operator, 
 # removing an empty sub region, removing an empty variable (sub region 2), and reordering the data.
-data1.3 <- rbind(data1,data1.2)
+data1.3 <- rbind(data1,data1.2, data1.2_2022)
 data1.3 <- data1.3 %>% rename_all(make.names)
 data1.3 <- data1.3[!is.na(data1.3$sub_region_1),]
 data1.3 <- data1.3[,-c(5)]
@@ -40,6 +43,7 @@ data3 <- left_join(data1.4,data2.6, by = c("sub_region_1","week_year"))
 #Surplus data sets were removed to make for work space (RStudio has a limited amount of data for creating objects)
 rm(data1)
 rm(data1.2)
+rm(data1.2_2022)
 rm(data1.3)
 rm(data1.4)
 rm(data2.6)
@@ -56,12 +60,13 @@ data3.3 <- data3.3[,-c(1:2,4:7)]
 download.file("https://www.gstatic.com/covid19/mobility/Region_Mobility_Report_CSVs.zip", 
               destfile = "inputs/Region_Mobility_Report_CSVs.zip")
 unzip("inputs/Region_Mobility_Report_CSVs.zip", 
-      files = c("2021_GB_Region_Mobility_Report.csv","2020_GB_Region_Mobility_Report.csv"),
+      files = c("2022_GB_Region_Mobility_Report.csv","2021_GB_Region_Mobility_Report.csv","2020_GB_Region_Mobility_Report.csv"),
       exdir = "inputs/Google_Mobilty_Reports")
+data4.2_2022 <-  read.csv("inputs/Google_Mobilty_Reports/2022_GB_Region_Mobility_Report.csv")
 data4.2 <- read.csv("inputs/Google_Mobilty_Reports/2021_GB_Region_Mobility_Report.csv")
 data4.3 <- read.csv("inputs/Google_Mobilty_Reports/2020_GB_Region_Mobility_Report.csv")
 #With the data sets for the pandemic, we prepared a new data set, reordering, removing an empty sub region and creating a week variable.
-data4.4 <- rbind(data4.2,data4.3)
+data4.4 <- rbind(data4.2_2022, data4.2,data4.3)
 data4.4 <- data4.4[order(data4.4$sub_region_1,data4.4$sub_region_2,data4.4$date),]
 data4.4 <- data4.4[data4.4$sub_region_1 != "",]
 data4.4$date <- as.Date(data4.4$date)
@@ -69,7 +74,8 @@ data4.4$week_begin <- floor_date(data4.4$date, "week")
 #The Google mobility data was then interpolated.
 data4.5 <- do.call(rbind, by(data4.4,list(data4.4$sub_region_1,data4.4$sub_region_2),na_interpolation_LTLA2))
 #We then aggregated the daily data into weekly data, by sub region. After aggregation, the variable names were restored.
-data4.61 <- aggregate(data4.5[,10:15], by = list(data4.5$week_begin,data4.5$sub_region_1,data4.5$sub_region_2), mean, na.rm = TRUE)
+data4.61 <- aggregate(data4.5[,10:15],
+                      by = list(data4.5$week_begin,data4.5$sub_region_1,data4.5$sub_region_2), mean, na.rm = TRUE)
 data4.61 <- rename(data4.61, week_begin = Group.1)
 data4.61 <- rename(data4.61, sub_region_1 = Group.2)
 data4.61 <- rename(data4.61, sub_region_2 = Group.3)
@@ -129,6 +135,7 @@ data6.5 <- rename(data6.5, week_begin = Group.2)
 rm(data3)
 rm(data3.2)
 rm(data3.3)
+rm(data4.2_2022)
 rm(data4.2)
 rm(data4.3)
 rm(data4.4)
