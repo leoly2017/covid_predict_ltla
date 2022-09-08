@@ -1,0 +1,23 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Short-term local predictions of COVID-19 in the
+  United Kingdom using dynamic supervised machine
+  learning algorithms
+message: >-
+  If you use the source codes, please cite it using
+  the metadata from this file.
+type: software
+authors:
+  - given-names: Xin
+    family-names: Wang
+  - given-names: Yijia
+    family-names: Dong
+  - given-names: William David
+    family-names: Thompson
+  - given-names: You
+    family-names: Li
+    email: You.Li@njmu.edu.cn
+    affiliation: Nanjing Medical University
